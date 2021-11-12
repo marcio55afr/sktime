@@ -38,10 +38,14 @@ from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import check_array
 
 from sktime.classification.base import BaseClassifier
-from sktime.distances.elastic import euclidean_distance
+
+# New imports using Numba
+from sktime.distances import euclidean_distance, dtw_distance
+
+# Old imports using Cython
 from sktime.distances.elastic_cython import (
     ddtw_distance,
-    dtw_distance,
+#    dtw_distance,
     erp_distance,
     lcss_distance,
     msm_distance,
