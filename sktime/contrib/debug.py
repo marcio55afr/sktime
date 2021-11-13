@@ -2,14 +2,12 @@ import pandas as pd
 import numpy as np
 import time
 
-from datasets import load_UCR_UEA_dataset
-from classification.hybrid import HIVECOTEV2
-from sklearn.model_selection import train_test_split
-from classification.distance_based import KNeighborsTimeSeriesClassifier
+from sktime.datasets import load_UCR_UEA_dataset
+from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
 
-X_train, y_train = load_UCR_UEA_dataset("UnitTest", split="train",
+X_train, y_train = load_UCR_UEA_dataset("ACSF1", split="train",
 return_X_y=True)
-X_test, y_test = load_UCR_UEA_dataset("UnitTest", split="test",
+X_test, y_test = load_UCR_UEA_dataset("ACSF1", split="test",
 return_X_y=True)
 knn = KNeighborsTimeSeriesClassifier(distance="euclidean")
 knn2 = KNeighborsTimeSeriesClassifier(distance="dtw")

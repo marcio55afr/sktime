@@ -40,12 +40,12 @@ from sklearn.utils.validation import check_array
 from sktime.classification.base import BaseClassifier
 
 # New imports using Numba
-from sktime.distances import euclidean_distance, dtw_distance
+from sktime.distances import distance_factory, euclidean_distance
 
 # Old imports using Cython
 from sktime.distances.elastic_cython import (
     ddtw_distance,
-#    dtw_distance,
+    dtw_distance,
     erp_distance,
     lcss_distance,
     msm_distance,
@@ -122,7 +122,7 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
         self._cv_for_params = False
         self.distance = distance
         self.distance_params = distance_params
-
+        dist = distance
         if distance == "euclidean":  # Euclidean will default to the base class distance
             distance = euclidean_distance
         elif distance == "dtw":
@@ -167,6 +167,7 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
                     "are names from [euclidean,dtw,ddtw,wdtw,wddtw,lcss,erp,msm] or "
                     "please pass a callable distance measure into the constuctor"
                 )
+        distance = distance_factory(metric=dist)
 
         super(KNeighborsTimeSeriesClassifier, self).__init__(
             n_neighbors=n_neighbors,
