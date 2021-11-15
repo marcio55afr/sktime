@@ -398,6 +398,11 @@ def run_classification_experiment(
                 + ",,-1,-1"
             )
 
+            le = preprocessing.LabelEncoder()
+            le.fit(preds)
+            predicted = le.transform(preds)
+            actual = le.transform(y_test)
+
             write_results_to_uea_format(
                 second_line=second,
                 third_line=third,
@@ -408,13 +413,14 @@ def run_classification_experiment(
                 output_path=results_path,
                 estimator_name=cls_name,
                 resample_seed=resample_id,
-                y_pred=preds,
+                y_pred=predicted,
                 predicted_probs=probs,
                 dataset_name=dataset,
-                y_true=y_test,
+                y_true=actual,
                 split="TEST",
                 full_path=False,
             )
+
 
     if train_file:
         start = int(round(time.time() * 1000))

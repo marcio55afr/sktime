@@ -122,52 +122,7 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
         self._cv_for_params = False
         self.distance = distance
         self.distance_params = distance_params
-        dist = distance
-        if distance == "euclidean":  # Euclidean will default to the base class distance
-            distance = euclidean_distance
-        elif distance == "dtw":
-            distance = dtw_distance
-        elif distance == "dtwcv":  # special case to force loocv grid search
-            # cv in training
-            if distance_params is not None:
-                warnings.warn(
-                    "Warning: measure parameters have been specified for "
-                    "dtwcv. "
-                    "These will be ignored and parameter values will be "
-                    "found using LOOCV."
-                )
-            distance = dtw_distance
-            self._cv_for_params = True
-            self._param_matrix = {
-                "distance_params": [{"w": x / 100} for x in range(0, 100)]
-            }
-        elif distance == "ddtw":
-            distance = ddtw_distance
-        elif distance == "wdtw":
-            distance = wdtw_distance
-        elif distance == "wddtw":
-            distance = wddtw_distance
-        elif distance == "lcss":
-            distance = lcss_distance
-        elif distance == "erp":
-            distance = erp_distance
-        elif distance == "msm":
-            distance = msm_distance
-        elif distance == "twe":
-            distance = twe_distance
-        elif distance == "mpdist":
-            distance = mpdist
-            # When mpdist is used, the subsequence length (parameter m) must be set
-            # Example: knn_mpdist = KNeighborsTimeSeriesClassifier(
-            # metric='mpdist', metric_params={'m':30})
-        else:
-            if type(distance) is str:
-                raise ValueError(
-                    "Unrecognised distance measure: " + distance + ". Allowed values "
-                    "are names from [euclidean,dtw,ddtw,wdtw,wddtw,lcss,erp,msm] or "
-                    "please pass a callable distance measure into the constuctor"
-                )
-        distance = distance_factory(metric=dist)
+        distance = distance_factory(metric=distance)
 
         super(KNeighborsTimeSeriesClassifier, self).__init__(
             n_neighbors=n_neighbors,
