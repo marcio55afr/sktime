@@ -40,20 +40,20 @@ from sklearn.utils.validation import check_array
 from sktime.classification.base import BaseClassifier
 
 # New imports using Numba
-from sktime.distances import distance_factory, euclidean_distance
+from sktime.distances import distance_factory
 
 # Old imports using Cython
-from sktime.distances.elastic_cython import (
-    ddtw_distance,
-    dtw_distance,
-    erp_distance,
-    lcss_distance,
-    msm_distance,
-    twe_distance,
-    wddtw_distance,
-    wdtw_distance,
-)
-from sktime.distances.mpdist import mpdist
+# from sktime.distances.elastic_cython import (
+#     ddtw_distance,
+#     dtw_distance,
+#     erp_distance,
+#     lcss_distance,
+#     msm_distance,
+#     twe_distance,
+#     wddtw_distance,
+#     wdtw_distance,
+# )
+# from sktime.distances.mpdist import mpdist
 from sktime.utils.validation.panel import check_X, check_X_y
 
 
@@ -154,7 +154,7 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
             coerce_to_numpy=True,
         )
         # Transpose to work correctly with distance functions
-        X = X.transpose((0, 2, 1))
+        # X = X.transpose((0, 2, 1))
 
         y = np.asarray(y)
         check_classification_targets(y)
@@ -256,7 +256,7 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
             coerce_to_numpy=True,
         )
         # Transpose to work correctly with distance functions
-        X = X.transpose((0, 2, 1))
+        # X = X.transpose((0, 2, 1))
 
         if n_neighbors is None:
             n_neighbors = self.n_neighbors
