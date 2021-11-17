@@ -40,8 +40,8 @@ from sklearn.utils.validation import check_array
 from sktime.classification.base import BaseClassifier
 
 # New imports using Numba
-from sktime.distances import distance_factory
 from sktime.distances import distance as sktime_distance
+from sktime.distances import distance_factory
 
 # Old imports using Cython
 # from sktime.distances.elastic_cython import (
@@ -56,6 +56,7 @@ from sktime.distances import distance as sktime_distance
 # )
 # from sktime.distances.mpdist import mpdist
 from sktime.utils.validation.panel import check_X, check_X_y
+
 
 class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
     """KNN Time Series Classifier.
