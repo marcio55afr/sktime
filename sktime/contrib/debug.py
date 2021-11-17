@@ -7,6 +7,7 @@ from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
 from sktime.distances import distance_factory
 from sktime.datatypes import convert_to
 from sktime.distances.elastic_cython import dtw_distance
+from tslearn.metrics import dtw as tslearn_dtw
 
 dataset_name = "Beef"
 # dataset_name = "ACSF1"
@@ -39,4 +40,5 @@ def run_experiment(distance, name=None):
 if __name__ == '__main__':
     run_experiment('dtw')
     run_experiment(dtw_distance, "cython dtw")
+    run_experiment(tslearn_dtw, "tslearn dtw")
     print("done")
