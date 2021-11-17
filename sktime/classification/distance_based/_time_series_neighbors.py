@@ -41,6 +41,7 @@ from sktime.classification.base import BaseClassifier
 
 # New imports using Numba
 from sktime.distances import distance_factory
+from sktime.distances import distance as sktime_distance
 
 # Old imports using Cython
 # from sktime.distances.elastic_cython import (
@@ -55,7 +56,6 @@ from sktime.distances import distance_factory
 # )
 # from sktime.distances.mpdist import mpdist
 from sktime.utils.validation.panel import check_X, check_X_y
-
 
 class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
     """KNN Time Series Classifier.
@@ -122,7 +122,9 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
         self._cv_for_params = False
         self.distance = distance
         self.distance_params = distance_params
-        distance = distance_factory(metric=distance)
+
+        if isinstance(self.distance, str):
+            distance = distance_factory(metric=self.distance)
 
         super(KNeighborsTimeSeriesClassifier, self).__init__(
             n_neighbors=n_neighbors,
@@ -135,6 +137,10 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
 
         # We need to add is-fitted state when inheriting from scikit-learn
         self._is_fitted = False
+
+    def get_x(self, X):
+        X = X.transpose((0, 2, 1))
+        return X
 
     def fit(self, X, y):
         """Fit the model using X as training data and y as target values.
@@ -154,7 +160,10 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
             coerce_to_numpy=True,
         )
         # Transpose to work correctly with distance functions
-        # X = X.transpose((0, 2, 1))
+        X = self.get_x(X)
+
+        if isinstance(self.distance, str):
+            self.metric = distance_factory(metric=self.distance)
 
         y = np.asarray(y)
         check_classification_targets(y)
@@ -257,6 +266,7 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
         )
         # Transpose to work correctly with distance functions
         # X = X.transpose((0, 2, 1))
+        X = self.get_x(X)
 
         if n_neighbors is None:
             n_neighbors = self.n_neighbors
