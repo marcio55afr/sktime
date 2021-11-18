@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Debug distances."""
+
 import time
 
 import numpy as np
