@@ -33,6 +33,7 @@ from sklearn.metrics import pairwise_distances_chunked
 from sklearn.model_selection import GridSearchCV, LeaveOneOut
 from sklearn.neighbors import KNeighborsClassifier as _KNeighborsClassifier
 from sklearn.neighbors._base import _check_weights, _get_weights
+
 from sklearn.utils.extmath import weighted_mode
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import check_array
@@ -139,9 +140,6 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
         # We need to add is-fitted state when inheriting from scikit-learn
         self._is_fitted = False
 
-    def get_x(self, X):
-        X = X.transpose((0, 2, 1))
-        return X
 
     def fit(self, X, y):
         """Fit the model using X as training data and y as target values.
@@ -161,10 +159,10 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
             coerce_to_numpy=True,
         )
         # Transpose to work correctly with distance functions
-        X = self.get_x(X)
+        X = X.transpose((0, 2, 1))
 
         if isinstance(self.distance, str):
-            self.metric = distance_factory(metric=self.distance)
+            self.metric = distance_factory(X[0], X[0], metric=self.distance)
 
         y = np.asarray(y)
         check_classification_targets(y)
@@ -266,8 +264,7 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
             coerce_to_numpy=True,
         )
         # Transpose to work correctly with distance functions
-        # X = X.transpose((0, 2, 1))
-        X = self.get_x(X)
+        X = X.transpose((0, 2, 1))
 
         if n_neighbors is None:
             n_neighbors = self.n_neighbors
