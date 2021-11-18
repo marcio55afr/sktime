@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Debug distances."""
 import time
 
 import numpy as np
@@ -21,7 +22,8 @@ knn = KNeighborsTimeSeriesClassifier(distance="euclidean")
 knn2 = KNeighborsTimeSeriesClassifier(distance="dtw")
 
 
-def run_experiment(distance, name=None):
+def _run_experiment(distance, name=None):
+    """Run experiment."""
     print("++++++++++++++++")
     if name is None:
         name = distance
@@ -38,7 +40,7 @@ def run_experiment(distance, name=None):
 
 
 if __name__ == "__main__":
-    run_experiment("dtw")
-    run_experiment(dtw_distance, "cython dtw")
-    run_experiment(tslearn_dtw, "tslearn dtw")
+    _run_experiment("dtw")
+    _run_experiment(dtw_distance, "cython dtw")
+    _run_experiment(tslearn_dtw, "tslearn dtw")
     print("done")
