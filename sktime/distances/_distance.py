@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Compute the distance between two timeseries."""
+"""Compute the distance between two time series."""
 
 from typing import Any, Callable, Union
 
@@ -34,9 +34,9 @@ def erp_distance(
     g: float = 0.0,
     **kwargs: Any,
 ) -> float:
-    """Compute the Edit distance for real penalty (erp) distance between two series.
+    """Compute the Edit distance for real penalty (ERP) distance between two series.
 
-    Erp first proposed in [1]_ attempts to improve accuracy of distance computation
+    ERP, first proposed in [1]_, attempts align time series
     by better considering how indexes are carried forward through the cost matrix.
     Usually in the dtw cost matrix, if an alignment can't be found the previous value
     is carried forward. Erp instead proposes the idea of gaps or sequences of points
@@ -45,9 +45,9 @@ def erp_distance(
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     lower_bounding: LowerBounding or int, defaults = LowerBounding.NO_BOUNDING
         Lower bounding technique to use.
         If LowerBounding enum provided, the following are valid:
@@ -78,7 +78,7 @@ def erp_distance(
     Returns
     -------
     float
-        Erp distance between x and y.
+        ERP distance between x and y.
 
     Raises
     ------
@@ -133,22 +133,22 @@ def edr_distance(
     epsilon: float = None,
     **kwargs: Any,
 ) -> float:
-    """Compute the Edit distance for real sequences (edr) between two series.
+    """Compute the Edit distance for real sequences (EDR) between two series.
 
-    Edr computes the minimum number of elements (as a percentage) that must be removed
+    EDR computes the minimum number of elements (as a percentage) that must be removed
     from x and y so that the sum of the distance between the remaining signal elements
-    lies within the tolerance (epsilon). Edr was originally put forward in [1]_.
+    lies within the tolerance (epsilon). EDR was originally proposed in [1]_.
 
     The value returned will be between 0 and 1 per time series. The value will
-    represent as a percentage of elements that must be removed for the timeseries to
+    represent as a percentage of elements that must be removed for the time series to
     be an exact match.
 
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     lower_bounding: LowerBounding or int, defaults = LowerBounding.NO_BOUNDING
         Lower bounding technique to use.
         If LowerBounding enum provided, the following are valid:
@@ -181,7 +181,7 @@ def edr_distance(
     -------
     float
         Edr distance between the x and y. The value will be between 0.0 and 1.0
-        where 0.0 is an exact match between timeseries (i.e. they are the same) and
+        where 0.0 is an exact match between time series (i.e. they are the same) and
         1.0 where there are no matching subsequences.
 
     Raises
@@ -238,22 +238,22 @@ def lcss_distance(
     epsilon: float = 1.0,
     **kwargs: Any,
 ) -> float:
-    """Compute the longest common subsequence (lcss) score between two timeseries.
+    """Compute the longest common subsequence (LCSS) score between two time series.
 
-    Lcss attempts to find the longest common sequence between two timeseries and returns
-    a value that is the percentage that longest common sequence assumes. Originally
-    present in [1]_, lcss is computed by matching indexes that are similar up until a
-    defined threshold (epsilon).
+    LCSS attempts to find the longest common sequence between two time series and
+    returns a value that is the percentage that longest common sequence assumes.
+    Originally present in [1]_, LCSS is computed by matching indexes that are
+    similar up until a defined threshold (epsilon).
 
-    The value returned will be between 0.0 and 1.0, where 0.0 means the two timeseries
+    The value returned will be between 0.0 and 1.0, where 0.0 means the two time series
     are exactly the same and 1.0 means they are complete opposites.
 
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     lower_bounding: LowerBounding or int, defaults = LowerBounding.NO_BOUNDING
         Lower bounding technique to use.
         If LowerBounding enum provided, the following are valid:
@@ -286,7 +286,7 @@ def lcss_distance(
     -------
     float
         Lcss distance between x and y. The value returned will be between 0.0 and 1.0,
-        where 0.0 means the two timeseries are exactly the same and 1.0 means they
+        where 0.0 means the two time series are exactly the same and 1.0 means they
         are complete opposites.
 
     Raises
@@ -343,11 +343,11 @@ def wddtw_distance(
     g: float = 0.0,
     **kwargs: Any,
 ) -> float:
-    r"""Compute the weighted derivative dynamic time warping (wddtw) distance.
+    r"""Compute the weighted derivative dynamic time warping (WDDTW) distance.
 
-    Wddtw was first proposed in [1]_ as an extension of ddtw. By adding a weight
+    WDDTW was first proposed in [1]_ as an extension of DDTW. By adding a weight
     to the derivative it means the alignment isn't only considering the shape of the
-    timeseries, but also the phase.
+    time series, but also the phase.
 
     Formally the derivative is calculated as:
 
@@ -362,9 +362,9 @@ def wddtw_distance(
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     lower_bounding: LowerBounding or int, defaults = LowerBounding.NO_BOUNDING
         Lower bounding technique to use.
         If LowerBounding enum provided, the following are valid:
@@ -458,12 +458,12 @@ def wdtw_distance(
     g: float = 0.0,
     **kwargs: Any,
 ) -> float:
-    """Compute the weighted dynamic time warping (wdtw) distance between timeseries.
+    """Compute the weighted dynamic time warping (WDTW) distance between time series.
 
-    First proposed in [1]_, wdtw adds a  adds a multiplicative weight penalty based on
-    the warping distance. This means that timeseries with lower phase difference have
-    a smaller weight imposed (i.e less penalty imposed) and timeseries with larger phase
-    difference have a larger weight imposed (i.e. larger penalty imposed).
+    First proposed in [1]_, WDTW adds a  adds a multiplicative weight penalty based on
+    the warping distance. This means that time series with lower phase difference have
+    a smaller weight imposed (i.e less penalty imposed) and time series with larger
+    phase difference have a larger weight imposed (i.e. larger penalty imposed).
 
     Formally this can be described as:
 
@@ -477,9 +477,9 @@ def wdtw_distance(
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     lower_bounding: LowerBounding or int, defaults = LowerBounding.NO_BOUNDING
         Lower bounding technique to use.
         If LowerBounding enum provided, the following are valid:
@@ -566,10 +566,10 @@ def ddtw_distance(
     compute_derivative: DerivativeCallable = _average_of_slope,
     **kwargs: Any,
 ) -> float:
-    r"""Compute the derivative dynamic time warping (ddtw) distance between timeseries.
+    r"""Compute the derivative dynamic time warping (DDTW) distance between time series.
 
-    Ddtw is an adaptation of Dtw originally proposed in [1]_. Ddtw attempts to
-    improve on dtw by better account for the 'shape' of the timeseries.
+    DDTW is an adaptation of DTW originally proposed in [1]_. DDTW attempts to
+    improve on dtw by better account for the 'shape' of the time series.
     This is done by considering y axis data points as higher level features of 'shape'.
     To do this the first derivative of the sequence is taken, and then using this
     derived sequence a dtw computation is done.
@@ -579,14 +579,14 @@ def ddtw_distance(
     .. math::
         D_{x}[q] = \frac{{}(q_{i} - q_{i-1} + ((q_{i+1} - q_{i-1}/2)}{2}
 
-    Where q is the original timeseries and d_q is the derived timeseries.
+    Where q is the original time series and d_q is the derived time series.
 
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     lower_bounding: LowerBounding or int, defaults = LowerBounding.NO_BOUNDING
         Lower bounding technique to use.
         If LowerBounding enum provided, the following are valid:
@@ -674,13 +674,13 @@ def dtw_distance(
     bounding_matrix: np.ndarray = None,
     **kwargs: Any,
 ) -> float:
-    r"""Compute the dynamic time warping (dtw) distance between two timeseries.
+    r"""Compute the dynamic time warping (DTW) distance between two time series.
 
-    Originally put forward in [1]_ dtw goal is to compute a more accurate distance
-    between two timeseries by considering their alignments during the calculation. This
-    is done by measuring the distance (normally using Euclidean) between two timeseries
-    and then generate a warping path to 'realign' the two timeseries thereby creating
-    a path between the two that accounts for alignment.
+    Originally proposedin [1]_ DTW computes the distance between two time series by
+    considering their alignments during the calculation. This is done by measuring
+    the pointwise distance (normally using Euclidean) between all elements of the two
+    time series and then using dynamic programming to find the warping path
+    that minimises the total pointwise distance between realigned series.
 
     Mathematically dtw can be defined as:
 
@@ -690,9 +690,9 @@ def dtw_distance(
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     lower_bounding: LowerBounding or int, defaults = LowerBounding.NO_BOUNDING
         Lower bounding technique to use.
         If LowerBounding enum provided, the following are valid:
@@ -766,9 +766,9 @@ def dtw_distance(
 
 
 def squared_distance(x: np.ndarray, y: np.ndarray, **kwargs: Any) -> float:
-    r"""Compute the Squared distance between two timeseries.
+    r"""Compute the squared distance between two time series.
 
-    The squared distance between two timeseries is defined as:
+    The squared distance between two time series is defined as:
 
     .. math::
         sd(x, y) = \sum_{i=1}^{n} (x_i - y_i)^2
@@ -776,9 +776,9 @@ def squared_distance(x: np.ndarray, y: np.ndarray, **kwargs: Any) -> float:
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     kwargs: Any
         Extra kwargs. For squared there are none however, this is kept for
         consistency.
@@ -815,11 +815,12 @@ def squared_distance(x: np.ndarray, y: np.ndarray, **kwargs: Any) -> float:
 
 
 def euclidean_distance(x: np.ndarray, y: np.ndarray, **kwargs: Any) -> float:
-    r"""Compute the Euclidean distance between two timeseries.
+    r"""Compute the Euclidean distance between two time series.
 
     Euclidean distance is supported for 1d, 2d and 3d arrays.
 
-    The euclidean distance between two timeseries is defined as:
+    The Euclidean distance between two time series is the square root of the squared
+    distance and is defined as:
 
     .. math::
         ed(x, y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}
@@ -827,9 +828,9 @@ def euclidean_distance(x: np.ndarray, y: np.ndarray, **kwargs: Any) -> float:
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     kwargs: Any
         Extra kwargs. For euclidean there are none however, this is kept for
         consistency.
@@ -878,7 +879,7 @@ def distance(
     ],
     **kwargs: Any,
 ) -> float:
-    """Compute the distance between two timeseries.
+    """Compute the distance between two time series.
 
     First the distance metric is 'resolved'. This means the metric that is passed
     is resolved to a callable. The callable is then called with x and y and the
@@ -887,9 +888,9 @@ def distance(
     Parameters
     ----------
     x: np.ndarray (1d or 2d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array)
-        Second timeseries.
+        Second time series.
     metric: str or Callable
         The distance metric to use.
         If a string is given, the value must be one of the following strings:
@@ -968,9 +969,9 @@ def distance_factory(
     Parameters
     ----------
     x: np.ndarray (1d or 2d array), defaults = None
-        First timeseries.
+        First time series.
     y: np.ndarray (1d or 2d array), defaults = None
-        Second timeseries.
+        Second time series.
     metric: str or Callable, defaults  = 'euclidean'
         The distance metric to use.
         If a string is given, the value must be one of the following strings:
@@ -1029,7 +1030,7 @@ def pairwise_distance(
     ],
     **kwargs: Any,
 ) -> np.ndarray:
-    """Compute the pairwise distance matrix between two timeseries.
+    """Compute the pairwise distance matrix between two time series.
 
     First the distance metric is 'resolved'. This means the metric that is passed
     is resolved to a callable. The callable is then called with x and y and the
@@ -1039,9 +1040,9 @@ def pairwise_distance(
     Parameters
     ----------
     x: np.ndarray (1d, 2d or 3d array)
-        First timeseries.
+        First time series.
     y: np.ndarray (1d, 2d or 3d array)
-        Second timeseries.
+        Second time series.
     metric: str or Callable
         The distance metric to use.
         If a string is given, the value must be one of the following strings:
@@ -1064,7 +1065,7 @@ def pairwise_distance(
     Returns
     -------
     np.ndarray (2d of size mxn where m is len(x) and n is len(y)).
-        Pairwise distance matrix between the two timeseries.
+        Pairwise distance matrix between the two time series.
 
     Raises
     ------
