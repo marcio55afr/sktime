@@ -14,13 +14,15 @@ os.environ["MKL_NUM_THREADS"] = "1"  # must be done before numpy import!!
 os.environ["NUMEXPR_NUM_THREADS"] = "1"  # must be done before numpy import!!
 os.environ["OMP_NUM_THREADS"] = "1"  # must be done before numpy import!!
 
+import time
+
+import numpy as np
+
 import sktime.datasets.tsc_dataset_names as dataset_lists
 from sktime.benchmarking.experiments import load_and_run_classification_experiment
-from sktime.utils.data_io import load_from_tsfile_to_dataframe as load_ts
-import numpy as np
 from sktime.classification.base import BaseClassifier
-from sktime.distances import (dtw_distance, euclidean_distance)
-import time
+from sktime.distances import dtw_distance, euclidean_distance
+from sktime.utils.data_io import load_from_tsfile_to_dataframe as load_ts
 
 """Prototype mechanism for testing classifiers on the UCR format. This mirrors the
 mechanism used in Java,
@@ -31,26 +33,40 @@ generated in java.
 """
 
 
-
-
 def window_sizes():
+    """Roadtest the new distances."""
     x = np.random.rand(1000)
     y = np.random.rand(1000)
 
     t = time.time()
-    print("Full DTW Distance = ",dtw_distance(x,y), " takes = ",(time.time()-t))
-    print("Euclidean Distance = ",euclidean_distance(x,y), " takes = ",(time.time()-t))
-
-    for w in range(0,len(x),100):
-        t = time.time()
-        print("Window ",w," DTW Distance = ", dtw_distance(x, y,window=w),
+    print("Full DTW Distance = ", dtw_distance(x, y), " takes = ", (time.time() - t))
+    print(
+        "Euclidean Distance = ",
+        euclidean_distance(x, y),
         " takes = ",
-              (time.time() - t))
-    for w in range(0,len(x),100):
-        t = time.time()
-        print("Window ",w," DTW Distance = ", dtw_distance(x, y, lower_bounding=2, window=w), " takes = ",
-              (time.time() - t))
+        (time.time() - t),
+    )
 
+    for w in range(0, len(x), 100):
+        t = time.time()
+        print(
+            "Window ",
+            w,
+            " DTW Distance = ",
+            dtw_distance(x, y, window=w),
+            " takes = ",
+            (time.time() - t),
+        )
+    for w in range(0, len(x), 100):
+        t = time.time()
+        print(
+            "Window ",
+            w,
+            " DTW Distance = ",
+            dtw_distance(x, y, lower_bounding=2, window=w),
+            " takes = ",
+            (time.time() - t),
+        )
 
 
 def demo_loading():
