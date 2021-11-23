@@ -33,7 +33,7 @@ generated in java.
 """
 
 
-def window_sizes():
+def _window_sizes():
     """Roadtest the new distances."""
     x = np.random.rand(1000)
     y = np.random.rand(1000)
