@@ -21,7 +21,8 @@ import numpy as np
 import sktime.datasets.tsc_dataset_names as dataset_lists
 from sktime.benchmarking.experiments import load_and_run_classification_experiment
 from sktime.classification.base import BaseClassifier
-from sktime.distances import dtw_distance, euclidean_distance
+from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
+from sktime.distances import distance, dtw_distance, euclidean_distance
 from sktime.utils.data_io import load_from_tsfile_to_dataframe as load_ts
 
 """Prototype mechanism for testing classifiers on the UCR format. This mirrors the
@@ -46,7 +47,10 @@ def _window_sizes():
         " takes = ",
         (time.time() - t),
     )
-
+    print(
+        "Using generalised distance function ED = ", distance(x, y, metric="euclidean")
+    )
+    print("Using generalised distance function DTW = ", distance(x, y, metric="dtw"))
     for w in range(0, len(x), 100):
         t = time.time()
         print(
@@ -174,6 +178,7 @@ if __name__ == "__main__":
     """
     Example simple usage, with arguments input via script or hard coded for testing.
     """
+    _window_sizes()
     if sys.argv.__len__() > 1:  # cluster run, this is fragile
         print(sys.argv)
         data_dir = sys.argv[1]
@@ -217,6 +222,7 @@ if __name__ == "__main__":
                 problem_path=data_dir,
                 results_path=results_dir,
                 cls_name=classifier,
+                classifier=KNeighborsTimeSeriesClassifier(metric="dtw"),
                 dataset=temp[i],
                 resample_id=resample,
                 build_train=tf,
