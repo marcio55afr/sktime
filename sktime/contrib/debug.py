@@ -13,8 +13,8 @@ from sktime.distances.elastic_cython import dtw_distance
 from sktime.distances.tests._utils import create_test_distance_numpy
 
 # dataset_name = "Beef"
-# dataset_name = "ACSF1"
-dataset_name = "PenDigits"
+dataset_name = "ACSF1"
+# dataset_name = "PenDigits"
 X_train, y_train = load_UCR_UEA_dataset(dataset_name, split="train", return_X_y=True)
 X_test, y_test = load_UCR_UEA_dataset(dataset_name, split="test", return_X_y=True)
 knn = KNeighborsTimeSeriesClassifier(distance="euclidean")
@@ -39,6 +39,6 @@ def run_experiment(distance, name=None):
 
 if __name__ == "__main__":
     run_experiment("dtw")
-    run_experiment(dtw_distance, "cython dtw")
-    run_experiment(tslearn_dtw, "tslearn dtw")
+    # run_experiment(dtw_distance, "cython dtw")
+    # run_experiment(tslearn_dtw, "tslearn dtw")
     print("done")

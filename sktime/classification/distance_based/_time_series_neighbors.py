@@ -162,7 +162,7 @@ class KNeighborsTimeSeriesClassifier(_KNeighborsClassifier, BaseClassifier):
         X = X.transpose((0, 2, 1))
 
         if isinstance(self.distance, str):
-            self.metric = distance_factory(X[0], X[0], metric=self.distance)
+            self.metric = distance_factory(X[0], X[0], metric=self.distance, window=10)
 
         y = np.asarray(y)
         check_classification_targets(y)
