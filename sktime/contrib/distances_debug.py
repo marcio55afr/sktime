@@ -14,8 +14,15 @@ os.environ["MKL_NUM_THREADS"] = "1"  # must be done before numpy import!!
 os.environ["NUMEXPR_NUM_THREADS"] = "1"  # must be done before numpy import!!
 os.environ["OMP_NUM_THREADS"] = "1"  # must be done before numpy import!!
 
+import time
+
+import numpy as np
+
 import sktime.datasets.tsc_dataset_names as dataset_lists
 from sktime.benchmarking.experiments import load_and_run_classification_experiment
+from sktime.classification.base import BaseClassifier
+from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
+from sktime.distances import distance, dtw_distance, euclidean_distance
 from sktime.utils.data_io import load_from_tsfile_to_dataframe as load_ts
 
 """Prototype mechanism for testing classifiers on the UCR format. This mirrors the
@@ -25,6 +32,45 @@ but is not yet as engineered. However, if you generate results using the method
 recommended here, they can be directly and automatically compared to the results
 generated in java.
 """
+
+
+def _window_sizes():
+    """Roadtest the new distances."""
+    x = np.random.rand(1000)
+    y = np.random.rand(1000)
+
+    t = time.time()
+    print("Full DTW Distance = ", dtw_distance(x, y), " takes = ", (time.time() - t))
+    print(
+        "Euclidean Distance = ",
+        euclidean_distance(x, y),
+        " takes = ",
+        (time.time() - t),
+    )
+    print(
+        "Using generalised distance function ED = ", distance(x, y, metric="euclidean")
+    )
+    print("Using generalised distance function DTW = ", distance(x, y, metric="dtw"))
+    for w in range(0, len(x), 100):
+        t = time.time()
+        print(
+            "Window ",
+            w,
+            " DTW Distance = ",
+            dtw_distance(x, y, window=w),
+            " takes = ",
+            (time.time() - t),
+        )
+    for w in range(0, len(x), 100):
+        t = time.time()
+        print(
+            "Window ",
+            w,
+            " DTW Distance = ",
+            dtw_distance(x, y, lower_bounding=2, window=w),
+            " takes = ",
+            (time.time() - t),
+        )
 
 
 def demo_loading():
@@ -132,6 +178,7 @@ if __name__ == "__main__":
     """
     Example simple usage, with arguments input via script or hard coded for testing.
     """
+    _window_sizes()
     if sys.argv.__len__() > 1:  # cluster run, this is fragile
         print(sys.argv)
         data_dir = sys.argv[1]
@@ -175,6 +222,7 @@ if __name__ == "__main__":
                 problem_path=data_dir,
                 results_path=results_dir,
                 cls_name=classifier,
+                classifier=KNeighborsTimeSeriesClassifier(metric="dtw"),
                 dataset=temp[i],
                 resample_id=resample,
                 build_train=tf,
